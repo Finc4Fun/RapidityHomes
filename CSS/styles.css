@@ -48,17 +48,17 @@ a { color: var(--white); text-decoration: none; }
   justify-content: space-between;
   align-items: center;
 }
-.brand img {
-     height: 45px;
-     width: auto;
-     display: block;
-   }
 .brand {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1.4rem;
   color: var(--white);
   letter-spacing: 2px;
 }
+.brand img {
+     height: 45px;
+     width: auto;
+     display: block;
+   }
 .nav-menu {
   list-style: none;
   display: flex;
