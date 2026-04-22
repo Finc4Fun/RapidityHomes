@@ -95,7 +95,7 @@ a { color: var(--white); text-decoration: none; }
 .hero {
   background-image:
     linear-gradient(rgba(30, 38, 40, 0.55), rgba(30, 38, 40, 0.55)),
-    url('../images/kitchen-2_orig.jpg');
+    url('../Images/kitchen-2_orig.jpg');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
