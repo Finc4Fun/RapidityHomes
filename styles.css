@@ -1,0 +1,347 @@
+/* ========================================================
+   Rapidity Homes — Main Stylesheet
+   ======================================================== */
+
+:root {
+  --teal: #323d3f;
+  --light: #d5d5d5;
+  --white: #ffffff;
+  --muted: #a8a8a8;
+  --accent: #2a92e5;
+}
+
+/* ========== RESET & BASE ========== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Questrial', sans-serif;
+  color: var(--muted);
+  background: var(--teal);
+  line-height: 1.6;
+}
+img { max-width: 100%; display: block; }
+h1, h2, h3, .bebas {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
+  font-weight: normal;
+}
+a { color: var(--white); text-decoration: none; }
+
+/* ========== LAYOUT ========== */
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ========== HEADER / NAV ========== */
+.header {
+  background: var(--teal);
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  color: var(--white);
+  letter-spacing: 2px;
+}
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+}
+.nav-menu a {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: opacity 0.2s;
+}
+.nav-menu a:hover { opacity: 0.7; }
+
+/* ========== BUTTONS ========== */
+.btn {
+  display: inline-block;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 2px;
+  font-size: 16px;
+  padding: 14px 36px;
+  text-transform: uppercase;
+  border: 2px solid var(--white);
+  color: var(--white);
+  background: transparent;
+  transition: all 0.25s;
+  cursor: pointer;
+}
+.btn:hover { background: var(--white); color: var(--teal); }
+.btn-dark {
+  border-color: var(--teal);
+  color: var(--teal);
+}
+.btn-dark:hover { background: var(--teal); color: var(--white); }
+.btn-large { padding: 18px 48px; font-size: 18px; }
+
+/* ========== HERO (BANNER) ========== */
+.hero {
+  background-image:
+    linear-gradient(rgba(30, 38, 40, 0.55), rgba(30, 38, 40, 0.55)),
+    url('../images/kitchen-2_orig.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  min-height: 511px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6rem 1.5rem;
+}
+.hero-inner { max-width: 900px; }
+.hero h1 {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  color: var(--white);
+  line-height: 1.05;
+  margin-bottom: 3rem;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+.hero-sub {
+  font-family: 'Questrial', sans-serif;
+  color: var(--white);
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-weight: 600;
+  margin-bottom: 2.5rem;
+  line-height: 1.4;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ========== SECTIONS ========== */
+.section { padding: 5rem 0; }
+.section-dark { background: var(--teal); color: var(--light); }
+.section-dark h2 { color: var(--light); }
+.section-dark p { color: var(--light); }
+.section-light { background: var(--light); color: var(--teal); }
+.section-light h2 { color: var(--teal); }
+.section-light p { color: var(--teal); }
+
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.section-sub {
+  text-align: center;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  font-weight: 600;
+  max-width: 800px;
+  margin: 0 auto 1.5rem;
+}
+.section-body {
+  font-size: 18px;
+  text-align: center;
+  max-width: 850px;
+  margin: 0 auto 2rem;
+}
+.section-note {
+  margin-top: 3rem;
+  font-style: italic;
+}
+.styled-hr {
+  width: 80px;
+  height: 2px;
+  background: currentColor;
+  border: none;
+  margin: 1.5rem auto 2rem;
+  opacity: 0.6;
+}
+.styled-hr-short { width: 50px; }
+.section-cta { text-align: center; margin-top: 2rem; }
+
+/* ========== TWO-COLUMN ========== */
+.two-col {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+.two-col-reverse { grid-template-columns: 1fr 1.55fr; }
+
+.two-col-content h2 { text-align: center; margin-bottom: 0; }
+.two-col-content .styled-hr { margin: 1rem auto 1.5rem; }
+.two-col-content p {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 1.5rem;
+}
+.two-col-img img { width: 100%; height: auto; }
+
+/* ========== GALLERY ========== */
+.gallery-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.gallery-row img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+/* ========== FEATURE ROW ========== */
+.feature-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  text-align: center;
+  margin-top: 3rem;
+}
+.feature-item h3 {
+  font-size: 2rem;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+.section-light .feature-item h3 { color: var(--teal); }
+.feature-item p { font-size: 16px; }
+.feature-strong {
+  color: var(--white);
+}
+
+/* ========== CONTACT ========== */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 3rem;
+  margin-top: 2rem;
+  text-align: left;
+}
+.contact-info p {
+  text-align: left;
+  font-size: 17px;
+  margin-bottom: 1rem;
+}
+.contact-info strong {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem;
+  letter-spacing: 1px;
+  color: var(--white);
+  display: block;
+  margin-top: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+.contact-value {
+  color: var(--light);
+  margin-bottom: 0.5rem;
+}
+.contact-value a {
+  color: var(--light);
+  text-decoration: underline;
+}
+
+/* ========== FORM ========== */
+form {
+  background: var(--white);
+  padding: 2rem;
+  border: 1px solid rgba(50, 61, 63, 0.15);
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.form-field { margin-bottom: 1rem; }
+.form-field label {
+  display: block;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--teal);
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+}
+.form-field label .req { color: var(--accent); }
+input, textarea, select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #c0c0c0;
+  font-family: 'Questrial', sans-serif;
+  font-size: 15px;
+  color: var(--teal);
+  background: #fafafa;
+  border-radius: 0;
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--teal);
+  background: var(--white);
+}
+textarea { resize: vertical; min-height: 100px; }
+.submit-btn {
+  width: 100%;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  padding: 14px;
+  background: var(--teal);
+  color: var(--white);
+  border: 2px solid var(--teal);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s;
+  margin-top: 0.5rem;
+}
+.submit-btn:hover { background: transparent; color: var(--teal); }
+.honeypot { display: none; }
+
+/* ========== FOOTER ========== */
+footer {
+  background: #1e2628;
+  color: var(--muted);
+  padding: 2rem 0;
+  text-align: center;
+  font-size: 14px;
+}
+footer a { color: var(--light); }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 900px) {
+  .hero {
+    background-attachment: scroll;
+    min-height: 400px;
+    padding: 4rem 1.5rem;
+  }
+  .section { padding: 3.5rem 0; }
+}
+
+@media (max-width: 768px) {
+  .nav-menu { display: none; }
+  .two-col,
+  .two-col-reverse {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .two-col-reverse .two-col-img { order: -1; }
+  .gallery-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .gallery-row img { height: 160px; }
+  .feature-row {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .contact-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  form { padding: 1.5rem; }
+}
