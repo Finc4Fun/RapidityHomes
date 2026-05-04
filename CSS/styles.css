@@ -320,6 +320,15 @@ footer {
 }
 footer a { color: var(--light); }
 
+/* ========== FLAG ICON ========== */
+.flag-icon {
+  height: 20px;
+  width: auto;
+  vertical-align: middle;
+  margin-right: 8px;
+  display: inline;
+}
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 900px) {
   .hero {
