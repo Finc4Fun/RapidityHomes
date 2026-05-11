@@ -543,13 +543,6 @@ footer a { color: var(--light); }
   display: inline;
 }
 
-/* ========== RESPONSIVE — PRICING ========== */
-@media (max-width: 768px) {
-  .compare-grid,
-  .reviews-grid { grid-template-columns: 1fr; }
-  .savings-row { flex-wrap: wrap; }
-  .savings-amt { width: 100%; text-align: right; }
-}
 /* ========== RESPONSIVE ========== */
 @media (max-width: 900px) {
   .hero {
@@ -567,6 +560,18 @@ footer a { color: var(--light); }
     grid-template-columns: 1fr;
     gap: 2rem;
   }
+  .two-col-reverse .two-col-img { order: -1; }
+  .gallery-row { grid-template-columns: 1fr 1fr; }
+  .gallery-row img { height: 160px; }
+  .feature-row { grid-template-columns: 1fr; gap: 2rem; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  form { padding: 1.5rem; }
+  .compare-grid,
+  .reviews-grid { grid-template-columns: 1fr; }
+  .savings-row { flex-wrap: wrap; }
+  .savings-amt { width: 100%; text-align: right; }
+}
   .two-col-reverse .two-col-img { order: -1; }
   .gallery-row { grid-template-columns: 1fr 1fr; }
   .gallery-row img { height: 160px; }
