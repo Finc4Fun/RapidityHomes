@@ -320,14 +320,6 @@ footer {
 }
 footer a { color: var(--light); }
 
-/* ========== FLAG ICON ========== */
-.flag-icon {
-  height: 20px;
-  width: auto;
-  vertical-align: middle;
-  margin-right: 8px;
-  display: inline;
-}
 /* ========== PRICING VIGNETTE ========== */
 .pricing-divider {
   margin: 3rem auto;
@@ -575,6 +567,18 @@ footer a { color: var(--light); }
     grid-template-columns: 1fr;
     gap: 2rem;
   }
+  .two-col-reverse .two-col-img { order: -1; }
+  .gallery-row { grid-template-columns: 1fr 1fr; }
+  .gallery-row img { height: 160px; }
+  .feature-row { grid-template-columns: 1fr; gap: 2rem; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+  form { padding: 1.5rem; }
+  .compare-grid,
+  .reviews-grid { grid-template-columns: 1fr; }
+  .savings-row { flex-wrap: wrap; }
+  .savings-amt { width: 100%; text-align: right; }
+}
   .two-col-reverse .two-col-img { order: -1; }
   .gallery-row {
     grid-template-columns: 1fr 1fr;
