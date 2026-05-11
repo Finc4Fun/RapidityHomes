@@ -328,7 +328,236 @@ footer a { color: var(--light); }
   margin-right: 8px;
   display: inline;
 }
+/* ========== PRICING VIGNETTE ========== */
+.pricing-divider {
+  margin: 3rem auto;
+  width: 80px;
+}
+.vignette-label {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+.vignette-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  color: var(--light);
+  text-align: center;
+  margin-bottom: 0.25rem;
+  letter-spacing: 1px;
+}
+.vignette-sub {
+  margin-bottom: 2rem;
+}
+.savings-table {
+  max-width: 750px;
+  margin: 0 auto 1.5rem;
+}
+.savings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  gap: 1rem;
+}
+.savings-row:last-child { border-bottom: none; }
+.savings-month {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 70px;
+  padding-top: 2px;
+}
+.savings-desc {
+  font-size: 15px;
+  color: var(--light);
+  flex: 1;
+  line-height: 1.5;
+}
+.savings-amt {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  color: #5cb85c;
+  white-space: nowrap;
+  letter-spacing: 1px;
+}
+.honest-callout {
+  max-width: 750px;
+  margin: 1.5rem auto;
+  border-left: 3px solid var(--accent);
+  padding: 1rem 1.25rem;
+  background: rgba(255,255,255,0.04);
+}
+.honest-callout-label {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+.honest-callout p:last-child {
+  font-size: 15px;
+  color: var(--light);
+  line-height: 1.6;
+  margin: 0;
+  text-align: left;
+}
+.savings-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 750px;
+  margin: 0 auto 2.5rem;
+  background: rgba(255,255,255,0.06);
+  padding: 1rem 1.25rem;
+}
+.savings-total-label {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--light);
+}
+.savings-total-amt {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  color: #5cb85c;
+  letter-spacing: 1px;
+}
 
+/* ========== COMPARE GRID ========== */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  max-width: 750px;
+  margin: 0 auto;
+}
+.compare-card {
+  border: 1px solid rgba(255,255,255,0.12);
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.03);
+}
+.compare-featured {
+  border: 2px solid var(--accent);
+}
+.compare-badge {
+  display: inline-block;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  background: var(--accent);
+  color: var(--white);
+  padding: 3px 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.compare-typical {
+  display: inline-block;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 0.75rem;
+}
+.compare-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  color: var(--light);
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+}
+.compare-fee {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  color: var(--white);
+  margin-bottom: 1rem;
+  letter-spacing: 1px;
+}
+.compare-line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  color: var(--muted);
+}
+.compare-line:last-child { border-bottom: none; }
+.compare-val {
+  font-weight: 600;
+  color: var(--light);
+}
+.compare-good { color: #5cb85c; }
+.compare-bad { color: #e05c5c; }
+
+/* ========== REVIEWS ========== */
+.reviews-title { margin-top: 0; }
+.reviews-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.review-card {
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 1.25rem;
+  background: rgba(255,255,255,0.03);
+}
+.review-stars {
+  color: #f0ad4e;
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+  letter-spacing: 2px;
+}
+.review-text {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-style: italic;
+  margin-bottom: 0.75rem;
+  text-align: left;
+}
+.review-name {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--light);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.review-descriptor {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+  letter-spacing: 0.5px;
+}
+
+/* ========== FLAG ICON ========== */
+.flag-icon {
+  height: 20px;
+  width: auto;
+  vertical-align: middle;
+  margin-right: 8px;
+  display: inline;
+}
+
+/* ========== RESPONSIVE — PRICING ========== */
+@media (max-width: 768px) {
+  .compare-grid,
+  .reviews-grid { grid-template-columns: 1fr; }
+  .savings-row { flex-wrap: wrap; }
+  .savings-amt { width: 100%; text-align: right; }
+}
 /* ========== RESPONSIVE ========== */
 @media (max-width: 900px) {
   .hero {
