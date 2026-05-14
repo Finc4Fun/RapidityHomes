@@ -423,8 +423,7 @@ footer a { color: var(--light); }
   font-size: 1.8rem;
   color: #5cb85c;
   letter-spacing: 1px;
-}
-/* ========== SAVINGS HERO ROW ========== */
+}/* ========== SAVINGS HERO ROW ========== */
 .savings-hero-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -457,7 +456,20 @@ footer a { color: var(--light); }
   color: var(--muted);
 }
 
-/* ========== SAVINGS TABLE HEADER & TOTAL ========== */
+/* ========== SAVINGS TABLE ========== */
+.savings-table {
+  max-width: 750px;
+  margin: 0 auto 1.5rem;
+}
+.savings-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 100px 100px;
+  gap: 0.5rem;
+  padding: 12px 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  align-items: start;
+}
+.savings-row:last-child { border-bottom: none; }
 .savings-row-header {
   border-bottom: 1px solid rgba(255,255,255,0.2) !important;
   padding-bottom: 8px !important;
@@ -473,32 +485,46 @@ footer a { color: var(--light); }
   letter-spacing: 1px;
   color: var(--muted);
 }
-.savings-row {
-  display: grid;
-  grid-template-columns: 70px 1fr 90px 90px;
-  gap: 1rem;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  align-items: start;
+.savings-month {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-top: 2px;
 }
-.savings-row:last-child { border-bottom: none; }
+.savings-desc {
+  font-size: 14px;
+  color: var(--light);
+  line-height: 1.5;
+}
+.savings-amt {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  color: #5cb85c;
+  white-space: nowrap;
+  letter-spacing: 1px;
+  text-align: right;
+}
 .savings-typical {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   color: #e05c5c;
   white-space: nowrap;
   letter-spacing: 1px;
   text-align: right;
 }
+.savings-row-header .savings-amt,
 .savings-row-header .savings-typical {
   font-family: 'Open Sans', sans-serif;
   font-size: 11px;
   color: var(--muted);
+  letter-spacing: 1px;
   text-align: right;
 }
-.savings-amt { text-align: right; }
 .savings-row-total {
-  border-top: 1px solid rgba(255,255,255,0.2);
+  border-top: 1px solid rgba(255,255,255,0.2) !important;
   border-bottom: none !important;
   padding-top: 12px;
   margin-top: 4px;
@@ -510,13 +536,6 @@ footer a { color: var(--light); }
   color: var(--light);
   text-transform: none;
   letter-spacing: 0;
-}
-.savings-row-total .savings-amt {
-  color: #5cb85c;
-  font-size: 1.2rem;
-}
-.savings-row-total .savings-typical {
-  color: #e05c5c;
 }
 
 /* ========== SAVINGS PCT CALLOUT ========== */
@@ -542,6 +561,14 @@ footer a { color: var(--light); }
   max-width: 500px;
   margin: 0 auto;
   line-height: 1.5;
+}
+
+/* ========== RESPONSIVE — PRICING ========== */
+@media (max-width: 768px) {
+  .savings-hero-row { grid-template-columns: 1fr; }
+  .savings-row { grid-template-columns: 60px 1fr 80px 80px; font-size: 12px; }
+  .compare-grid, .reviews-grid { grid-template-columns: 1fr; }
+  .savings-amt, .savings-typical { font-size: 1rem; }
 }
 /* ========== COMPARE GRID ========== */
 .compare-grid {
