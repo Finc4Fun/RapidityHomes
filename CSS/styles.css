@@ -423,7 +423,8 @@ footer a { color: var(--light); }
   font-size: 1.8rem;
   color: #5cb85c;
   letter-spacing: 1px;
-}/* ========== SAVINGS HERO ROW ========== */
+}
+/* ========== SAVINGS HERO ROW ========== */
 .savings-hero-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -615,7 +616,7 @@ footer a { color: var(--light); }
 }
 .compare-fee {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 2rem;
+  font-size: 1.1rem;
   color: var(--white);
   margin-bottom: 1rem;
   letter-spacing: 1px;
@@ -632,6 +633,21 @@ footer a { color: var(--light); }
 .compare-val {
   font-weight: 600;
   color: var(--light);
+}
+.compare-line-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  padding: 8px 0;
+  border-bottom: none;
+  color: var(--muted);
+  margin-top: 4px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+.compare-line-total .compare-val {
+  font-size: 1.6rem;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
 }
 .compare-good { color: #5cb85c; }
 .compare-bad { color: #e05c5c; }
