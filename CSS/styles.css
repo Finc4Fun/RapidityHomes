@@ -345,85 +345,7 @@ footer a { color: var(--light); }
 .vignette-sub {
   margin-bottom: 2rem;
 }
-.savings-table {
-  max-width: 750px;
-  margin: 0 auto 1.5rem;
-}
-.savings-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  gap: 1rem;
-}
-.savings-row:last-child { border-bottom: none; }
-.savings-month {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  min-width: 70px;
-  padding-top: 2px;
-}
-.savings-desc {
-  font-size: 15px;
-  color: var(--light);
-  flex: 1;
-  line-height: 1.5;
-}
-.savings-amt {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.2rem;
-  color: #5cb85c;
-  white-space: nowrap;
-  letter-spacing: 1px;
-}
-.honest-callout {
-  max-width: 750px;
-  margin: 1.5rem auto;
-  border-left: 3px solid var(--accent);
-  padding: 1rem 1.25rem;
-  background: rgba(255,255,255,0.04);
-}
-.honest-callout-label {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  color: var(--accent);
-  margin-bottom: 0.5rem;
-}
-.honest-callout p:last-child {
-  font-size: 15px;
-  color: var(--light);
-  line-height: 1.6;
-  margin: 0;
-  text-align: left;
-}
-.savings-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  max-width: 750px;
-  margin: 0 auto 2.5rem;
-  background: rgba(255,255,255,0.06);
-  padding: 1rem 1.25rem;
-}
-.savings-total-label {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--light);
-}
-.savings-total-amt {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.8rem;
-  color: #5cb85c;
-  letter-spacing: 1px;
-}
+
 /* ========== SAVINGS HERO ROW ========== */
 .savings-hero-row {
   display: grid;
@@ -470,7 +392,6 @@ footer a { color: var(--light); }
   border-bottom: 1px solid rgba(255,255,255,0.08);
   align-items: start;
 }
-.savings-row:last-child { border-bottom: none; }
 .savings-row-header {
   border-bottom: 1px solid rgba(255,255,255,0.2) !important;
   padding-bottom: 8px !important;
@@ -485,6 +406,11 @@ footer a { color: var(--light); }
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--muted);
+  text-align: right;
+}
+.savings-row-header .savings-month,
+.savings-row-header .savings-desc {
+  text-align: left;
 }
 .savings-month {
   font-family: 'Open Sans', sans-serif;
@@ -516,14 +442,6 @@ footer a { color: var(--light); }
   letter-spacing: 1px;
   text-align: right;
 }
-.savings-row-header .savings-amt,
-.savings-row-header .savings-typical {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 1px;
-  text-align: right;
-}
 .savings-row-total {
   border-top: 1px solid rgba(255,255,255,0.2) !important;
   border-bottom: none !important;
@@ -539,38 +457,30 @@ footer a { color: var(--light); }
   letter-spacing: 0;
 }
 
-/* ========== SAVINGS PCT CALLOUT ========== */
-.savings-pct-callout {
+/* ========== HONEST CALLOUT ========== */
+.honest-callout {
   max-width: 750px;
-  margin: 1.5rem auto 0;
-  background: rgba(255,255,255,0.06);
-  padding: 2rem;
-  text-align: center;
+  margin: 1.5rem auto;
+  border-left: 3px solid var(--accent);
+  padding: 1rem 1.25rem;
+  background: rgba(255,255,255,0.04);
 }
-.savings-pct-number {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 5rem;
-  color: #5cb85c;
-  letter-spacing: 2px;
-  line-height: 1;
+.honest-callout-label {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent);
   margin-bottom: 0.5rem;
 }
-.savings-pct-desc {
-  font-family: 'Questrial', sans-serif;
-  font-size: 16px;
+.honest-callout p:last-child {
+  font-size: 15px;
   color: var(--light);
-  max-width: 500px;
-  margin: 0 auto;
-  line-height: 1.5;
+  line-height: 1.6;
+  margin: 0;
+  text-align: left;
 }
 
-/* ========== RESPONSIVE — PRICING ========== */
-@media (max-width: 768px) {
-  .savings-hero-row { grid-template-columns: 1fr; }
-  .savings-row { grid-template-columns: 60px 1fr 80px 80px; font-size: 12px; }
-  .compare-grid, .reviews-grid { grid-template-columns: 1fr; }
-  .savings-amt, .savings-typical { font-size: 1rem; }
-}
 /* ========== COMPARE GRID ========== */
 .compare-grid {
   display: grid;
@@ -617,7 +527,7 @@ footer a { color: var(--light); }
 .compare-fee {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1.1rem;
-  color: var(--white);
+  color: var(--muted);
   margin-bottom: 1rem;
   letter-spacing: 1px;
 }
@@ -637,20 +547,48 @@ footer a { color: var(--light); }
 .compare-line-total {
   display: flex;
   justify-content: space-between;
-  font-size: 15px;
-  padding: 8px 0;
-  border-bottom: none;
-  color: var(--muted);
-  margin-top: 4px;
+  align-items: center;
+  padding: 10px 0 0;
+  margin-top: 6px;
   border-top: 1px solid rgba(255,255,255,0.12);
+  border-bottom: none !important;
+  color: var(--muted);
+  font-size: 13px;
 }
 .compare-line-total .compare-val {
-  font-size: 1.6rem;
   font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem !important;
   letter-spacing: 1px;
 }
+.compare-line-total .compare-val.compare-good { color: #5cb85c; }
+.compare-line-total .compare-val.compare-bad { color: #e05c5c; }
 .compare-good { color: #5cb85c; }
 .compare-bad { color: #e05c5c; }
+
+/* ========== SAVINGS PCT CALLOUT ========== */
+.savings-pct-callout {
+  max-width: 750px;
+  margin: 1.5rem auto 0;
+  background: rgba(255,255,255,0.06);
+  padding: 2rem;
+  text-align: center;
+}
+.savings-pct-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem;
+  color: #5cb85c;
+  letter-spacing: 2px;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.savings-pct-desc {
+  font-family: 'Questrial', sans-serif;
+  font-size: 16px;
+  color: var(--light);
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
 
 /* ========== REVIEWS ========== */
 .reviews-title { margin-top: 0; }
@@ -728,8 +666,9 @@ footer a { color: var(--light); }
   .contact-grid { grid-template-columns: 1fr; }
   .form-row { grid-template-columns: 1fr; }
   form { padding: 1.5rem; }
+  .savings-hero-row { grid-template-columns: 1fr; }
+  .savings-row { grid-template-columns: 60px 1fr 80px 80px; font-size: 12px; }
   .compare-grid,
   .reviews-grid { grid-template-columns: 1fr; }
-  .savings-row { flex-wrap: wrap; }
-  .savings-amt { width: 100%; text-align: right; }
+  .savings-amt, .savings-typical { font-size: 1rem; }
 }
