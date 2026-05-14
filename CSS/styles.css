@@ -424,7 +424,125 @@ footer a { color: var(--light); }
   color: #5cb85c;
   letter-spacing: 1px;
 }
+/* ========== SAVINGS HERO ROW ========== */
+.savings-hero-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  max-width: 750px;
+  margin: 0 auto 2rem;
+}
+.savings-hero-card {
+  background: rgba(255,255,255,0.06);
+  padding: 1.25rem;
+  text-align: center;
+}
+.savings-hero-label {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+.savings-hero-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+  margin-bottom: 0.25rem;
+}
+.savings-hero-val.good { color: #5cb85c; }
+.savings-hero-val.bad { color: #e05c5c; }
+.savings-hero-sub {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+}
 
+/* ========== SAVINGS TABLE HEADER & TOTAL ========== */
+.savings-row-header {
+  border-bottom: 1px solid rgba(255,255,255,0.2) !important;
+  padding-bottom: 8px !important;
+}
+.savings-row-header .savings-month,
+.savings-row-header .savings-desc,
+.savings-row-header .savings-amt,
+.savings-row-header .savings-typical {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+.savings-row {
+  display: grid;
+  grid-template-columns: 70px 1fr 90px 90px;
+  gap: 1rem;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  align-items: start;
+}
+.savings-row:last-child { border-bottom: none; }
+.savings-typical {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  color: #e05c5c;
+  white-space: nowrap;
+  letter-spacing: 1px;
+  text-align: right;
+}
+.savings-row-header .savings-typical {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  color: var(--muted);
+  text-align: right;
+}
+.savings-amt { text-align: right; }
+.savings-row-total {
+  border-top: 1px solid rgba(255,255,255,0.2);
+  border-bottom: none !important;
+  padding-top: 12px;
+  margin-top: 4px;
+}
+.savings-row-total .savings-month {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--light);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.savings-row-total .savings-amt {
+  color: #5cb85c;
+  font-size: 1.2rem;
+}
+.savings-row-total .savings-typical {
+  color: #e05c5c;
+}
+
+/* ========== SAVINGS PCT CALLOUT ========== */
+.savings-pct-callout {
+  max-width: 750px;
+  margin: 1.5rem auto 0;
+  background: rgba(255,255,255,0.06);
+  padding: 2rem;
+  text-align: center;
+}
+.savings-pct-number {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 5rem;
+  color: #5cb85c;
+  letter-spacing: 2px;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+.savings-pct-desc {
+  font-family: 'Questrial', sans-serif;
+  font-size: 16px;
+  color: var(--light);
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
 /* ========== COMPARE GRID ========== */
 .compare-grid {
   display: grid;
