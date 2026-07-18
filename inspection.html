@@ -291,6 +291,7 @@
   Rapidity Homes — Inspection Report<br>
   <button id="btnExport" class="footer-link">Download a backup copy</button> ·
   <button id="btnImportTrigger" class="footer-link">Restore from a backup</button> ·
+  <button id="btnClearDraft" class="footer-link">Clear saved draft &amp; start fresh</button> ·
   <button id="btnDebugPdf" class="footer-link">Download generated PDF (debug)</button>
 </footer>
 
@@ -605,6 +606,12 @@ document.getElementById('btnExport').addEventListener('click', ()=>{
   a.click();
 });
 document.getElementById('btnImportTrigger').addEventListener('click', ()=> document.getElementById('btnImport').click());
+document.getElementById('btnClearDraft').addEventListener('click', ()=>{
+  if(confirm('Clear the saved draft on this device and start a fresh form?')){
+    try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
+    location.reload();
+  }
+});
 document.getElementById('btnDebugPdf').addEventListener('click', async ()=>{
   const btn = document.getElementById('btnDebugPdf');
   const original = btn.textContent;
