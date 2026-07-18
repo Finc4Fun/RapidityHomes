@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Move-In / Move-Out Inspection Form | Rapidity Homes</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="icon" type="image/png" href="Images/favicon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Questrial&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="CSS/styles.css">
+<style>
+  /* Page-specific styles for the inspection form embed */
+  .form-hero { padding: 4rem 0 2rem; }
+  .form-hero .section-body { margin-bottom: 0; }
+  .form-embed-wrap {
+    max-width: 900px;
+    margin: 2rem auto 0;
+    background: var(--white);
+    padding: 1rem;
+  }
+  .form-embed-wrap iframe {
+    width: 100%;
+    min-height: 1400px;
+    border: none;
+    display: block;
+  }
+  .form-fallback {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+  .simple-header {
+    background: var(--teal);
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+</style>
+</head>
+<body>
+<header class="simple-header">
+  <div class="container nav-inner">
+    <a href="index.html" class="brand">
+      <img src="Images/Rapidity Logo White2.png" alt="Rapidity Homes">
+    </a>
+  </div>
+</header>
+
+<section class="section section-dark form-hero">
+  <div class="container">
+    <h2 class="section-title">Move-In / Move-Out Inspection Form</h2>
+    <hr class="styled-hr">
+    <p class="section-body">
+      Please complete this form at the start and end of your lease. Walk through each room, note the condition,
+      attach photos, and sign at the bottom. Once submitted, a copy is automatically emailed to Rapidity Homes
+      for your file.
+    </p>
+  </div>
+</section>
+
+<section class="section section-light">
+  <div class="container">
+    <div class="form-embed-wrap">
+      <!--
+        TODO: Replace JOTFORM_URL below with the real Jotform link once the form is built.
+        Jotform's embed code (Publish > Embed > iframe) will give you a src URL like:
+        https://form.jotform.com/XXXXXXXXXXXXX
+        Paste that same URL into both the iframe src and the fallback link href.
+      -->
+      <iframe
+        src="JOTFORM_URL"
+        title="Rapidity Homes Move-In / Move-Out Inspection Form"
+        allow="camera; microphone"
+      ></iframe>
+    </div>
+    <p class="form-fallback">
+      Form not loading? <a href="JOTFORM_URL" class="btn-dark" style="text-decoration:underline;">Open it directly</a>.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2026 Rapidity Homes &middot; Veteran-Founded &middot; Woman-Owned &middot; Alexandria, VA</p>
+  </div>
+</footer>
+</body>
+</html>
