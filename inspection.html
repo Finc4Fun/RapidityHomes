@@ -717,21 +717,57 @@ async function buildPdfBlob(){
   data.sigLandlord = await recolorSignature(data.sigLandlord, '#151515');
   const logoDataUrl = await getLogoDataUrl();
   const container = document.createElement('div');
-  container.style.cssText = 'position:absolute; left:-99999px; top:0; width:720px; padding:36px; font-family:Arial,Helvetica,sans-serif; color:#111; background:#fff;';
+  // Positioned within the normal viewport (not far off-screen) but behind everything else
+  // via a negative z-index — off-screen coordinates and `position:fixed` both caused
+  // blank captures with jsPDF's .html() helper, so we render on-screen-but-hidden instead,
+  // and call html2canvas directly ourselves for full control.
+  container.style.cssText = 'position:fixed; top:0; left:0; width:720px; padding:36px; font-family:Arial,Helvetica,sans-serif; color:#111; background:#fff; z-index:-999;';
   container.innerHTML = renderPrintHTML(data, logoDataUrl);
   document.body.appendChild(container);
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF('p','pt','a4');
-  // jsPDF's .html() returns its own promise that resolves once rendering AND pagination
-  // are fully complete — relying only on the `callback` option can fire early and
-  // produce a blank/empty document, so we await the real promise here instead.
-  await pdf.html(container, {
-    x:20, y:20, width:555, windowWidth:720,
-    html2canvas:{ scale:2 }
+
+  // Let images/layout settle before capture
+  await new Promise(r => setTimeout(r, 50));
+
+  const canvas = await html2canvas(container, {
+    scale: 2,
+    backgroundColor: '#ffffff',
+    width: 720,
+    windowWidth: 720,
+    useCORS: true
   });
   document.body.removeChild(container);
+
+  if(!canvas.width || !canvas.height){
+    throw new Error('html2canvas produced an empty canvas');
+  }
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p','pt','a4');
+  const marginPt = 20;
+  const pageWidthPt = 555; // A4 width (595pt) minus margins
+  const pageHeightPt = 802; // A4 height (842pt) minus margins
+  const pxToPt = pageWidthPt / canvas.width;
+  const pageHeightPx = Math.floor(pageHeightPt / pxToPt);
+
+  let renderedPx = 0;
+  let firstPage = true;
+  while(renderedPx < canvas.height){
+    const sliceHeightPx = Math.min(pageHeightPx, canvas.height - renderedPx);
+    const pageCanvas = document.createElement('canvas');
+    pageCanvas.width = canvas.width;
+    pageCanvas.height = sliceHeightPx;
+    pageCanvas.getContext('2d').drawImage(
+      canvas, 0, renderedPx, canvas.width, sliceHeightPx, 0, 0, canvas.width, sliceHeightPx
+    );
+    const imgData = pageCanvas.toDataURL('image/jpeg', 0.92);
+    if(!firstPage) pdf.addPage();
+    pdf.addImage(imgData, 'JPEG', marginPt, marginPt, pageWidthPt, sliceHeightPx * pxToPt);
+    renderedPx += sliceHeightPx;
+    firstPage = false;
+  }
+
   const blob = pdf.output('blob');
-  console.log('Generated PDF size (bytes):', blob.size);
+  console.log('Generated PDF size (bytes):', blob.size, '| canvas:', canvas.width, 'x', canvas.height);
   if(blob.size < 3000){
     throw new Error(`Generated PDF looks empty (${blob.size} bytes) — aborting send`);
   }
