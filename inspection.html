@@ -287,7 +287,8 @@
 <footer>
   Rapidity Homes — Inspection Report<br>
   <button id="btnExport" class="footer-link">Download a backup copy</button> ·
-  <button id="btnImportTrigger" class="footer-link">Restore from a backup</button>
+  <button id="btnImportTrigger" class="footer-link">Restore from a backup</button> ·
+  <button id="btnDebugPdf" class="footer-link">Download generated PDF (debug)</button>
 </footer>
 
 <script>
@@ -584,6 +585,24 @@ document.getElementById('btnExport').addEventListener('click', ()=>{
   a.click();
 });
 document.getElementById('btnImportTrigger').addEventListener('click', ()=> document.getElementById('btnImport').click());
+document.getElementById('btnDebugPdf').addEventListener('click', async ()=>{
+  const btn = document.getElementById('btnDebugPdf');
+  const original = btn.textContent;
+  btn.textContent = 'Generating…';
+  try{
+    const blob = await buildPdfBlob();
+    console.log('Debug PDF size (bytes):', blob.size);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'debug_generated_report.pdf';
+    a.click();
+  }catch(err){
+    console.error('Debug PDF generation failed:', err);
+    alert('PDF generation failed — check the console for details.');
+  } finally {
+    btn.textContent = original;
+  }
+});
 document.getElementById('btnImport').addEventListener('change', (e)=>{
   const file = e.target.files[0];
   if(!file) return;
