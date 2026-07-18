@@ -84,28 +84,31 @@
   .item{padding:9px 0; border-top:1px solid var(--hairline);}
   .item:first-child{border-top:none;}
   .item-row{display:flex; align-items:center; gap:10px;}
-  .ok-check{
-    appearance:none; -webkit-appearance:none; width:19px; height:19px; min-width:19px;
-    border-radius:50%; border:1.5px solid var(--hairline-strong); position:relative; cursor:pointer; margin:0;
+  .state-circle{
+    width:26px; height:26px; min-width:26px; border-radius:50%; border:1.5px solid var(--hairline-strong);
+    background:transparent; cursor:pointer; padding:0; position:relative; flex-shrink:0;
   }
-  .ok-check:checked{background:var(--green); border-color:var(--green);}
-  .ok-check:checked::after{
-    content:''; position:absolute; left:5px; top:2px; width:5px; height:9px;
-    border:solid #1a2122; border-width:0 2px 2px 0; transform:rotate(40deg);
+  .state-circle.state-ok{background:var(--green); border-color:var(--green);}
+  .state-circle.state-ok::after{
+    content:''; position:absolute; left:8px; top:4px; width:6px; height:12px;
+    border:solid #0d1112; border-width:0 2.5px 2.5px 0; transform:rotate(40deg);
   }
+  .state-circle.state-flag{background:var(--red); border-color:var(--red);}
+  .state-circle svg{width:17px; height:17px; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); pointer-events:none;}
   .item-name{
     flex:1; background:transparent; border:none; color:var(--text); font-size:17.5px; font-weight:400;
     font-family:'Questrial',sans-serif; padding:2px 0;
   }
   .item-name:focus{outline:none;}
   .item-note{
-    width:100%; background:transparent; border:none; color:var(--text-muted); font-size:16.5px;
-    font-family:'Questrial',sans-serif; padding:4px 0 0 29px; margin-top:2px;
+    flex:1; background:transparent; border:none; color:var(--text-muted); font-size:16.5px;
+    font-family:'Questrial',sans-serif; padding:4px 0;
   }
   .item-note:focus{outline:none; color:var(--text);}
   .item-note::placeholder{color:#4d5658;}
+  .note-row{display:flex; align-items:center; gap:8px; margin-top:2px;}
 
-  .thumbs{display:flex; gap:6px; flex-wrap:wrap; padding:6px 0 2px 29px;}
+  .thumbs{display:flex; gap:6px; flex-wrap:wrap; padding:6px 0 2px 0;}
   .thumb{position:relative; width:46px; height:46px; border-radius:6px; overflow:hidden;}
   .thumb img{width:100%; height:100%; object-fit:cover;}
   .thumb .rm{
@@ -295,6 +298,7 @@
 const LANDLORD_EMAIL = "info@rapidityhomes.com";
 const CAMERA_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8a2 2 0 012-2h1.5l1-1.5h7l1 1.5H18a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V8z"/><circle cx="12" cy="13" r="3.2"/></svg>';
 const X_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+const FLAG_SVG = '<svg viewBox="0 0 24 24" fill="#0d1112"><path d="M5 2.5v19h1.6v-6.8h11.2c.6 0 .9-.7.5-1.1l-2.7-3.1 2.7-3.1c.4-.4.1-1.1-.5-1.1H6.6V2.5H5z"/></svg>';
 
 const DEFAULT_ROOMS = [
   { name:"Kitchen", items:["Walls & Ceiling","Floor","Windows & Screens","Light Fixtures & Outlets","Cabinets & Hardware","Range / Oven","Refrigerator","Sink & Disposal"] },
@@ -308,7 +312,11 @@ let roomIdSeq = 0, itemIdSeq = 0;
 const DRAFT_KEY = 'rapidity_inspection_draft';
 
 function freshRoom(tpl){ roomIdSeq++; return { id:"room"+roomIdSeq, name: tpl.name, items: tpl.items.map(l=>freshItem(l)) }; }
-function freshItem(label){ itemIdSeq++; return { id:"item"+itemIdSeq, name:label, ok:false, notes:"" }; }
+function freshItem(label){ itemIdSeq++; return { id:"item"+itemIdSeq, name:label, status:"unreviewed", notes:"" }; }
+function itemStatus(item){
+  if(item.status) return item.status;
+  return item.ok === false ? 'flag' : 'ok'; // backwards-compat with older saved data
+}
 
 function init(){
   setupSignaturePad(document.getElementById('sigTenant'));
@@ -345,11 +353,13 @@ function render(){
       row.className = 'item';
       row.innerHTML = `
         <div class="item-row">
-          <input type="checkbox" class="ok-check" ${item.ok?'checked':''} data-room="${room.id}" data-item="${item.id}" data-field="ok">
+          <button class="state-circle state-${itemStatus(item)==='unreviewed' ? '' : itemStatus(item)}" data-action="cyclestatus" data-room="${room.id}" data-item="${item.id}" title="${itemStatus(item)==='ok' ? 'OK' : itemStatus(item)==='flag' ? 'Flag' : 'Not reviewed — tap to mark'}">${itemStatus(item)==='flag' ? FLAG_SVG : ''}</button>
           <input class="item-name" type="text" value="${escapeAttr(item.name)}" data-room="${room.id}" data-item="${item.id}" data-field="name">
+        </div>
+        <div class="note-row">
+          <input class="item-note" type="text" placeholder="Add note" value="${escapeAttr(item.notes)}" data-room="${room.id}" data-item="${item.id}" data-field="notes">
           <button class="icon-btn" data-action="photo" data-item="${item.id}">${CAMERA_SVG}<span class="icon-label">Photo</span></button>
         </div>
-        <input class="item-note" type="text" placeholder="Add note" value="${escapeAttr(item.notes)}" data-room="${room.id}" data-item="${item.id}" data-field="notes">
         <div class="thumbs" data-item="${item.id}"></div>
       `;
       itemsWrap.appendChild(row);
@@ -382,7 +392,7 @@ document.addEventListener('input', e=>{
     if(room){
       if(itemId){
         const item = room.items.find(i=>i.id===itemId);
-        if(item){ if(field==='ok') item.ok = t.checked; else item[field] = t.value; }
+        if(item){ item[field] = t.value; }
       } else if(field==='name') room.name = t.value;
     }
   }
@@ -426,6 +436,16 @@ document.addEventListener('click', e=>{
   else if(action === 'additem'){
     const room = state.rooms.find(r=>r.id===btn.dataset.room);
     room.items.push(freshItem('New Item')); render(); scheduleSave();
+  }
+  else if(action === 'cyclestatus'){
+    const room = state.rooms.find(r=>r.id===btn.dataset.room);
+    const item = room && room.items.find(i=>i.id===btn.dataset.item);
+    if(item){
+      const current = itemStatus(item);
+      item.status = current === 'unreviewed' ? 'ok' : current === 'ok' ? 'flag' : 'unreviewed';
+      delete item.ok; // fully migrate off the old boolean field once touched
+      render(); scheduleSave();
+    }
   }
   else if(action === 'photo'){ openPhotoPicker(btn.dataset.item); }
   else if(action === 'rmphoto'){
@@ -628,7 +648,7 @@ function renderPrintHTML(data, logoDataUrl){
       <div style="font-size:15px; font-weight:bold; border-bottom:1px solid #999; padding:0 0 5px; margin-bottom:6px;">${room.name}</div>
       ${room.items.map(item => `
         <div style="font-size:11.5px; padding:5px 0; border-bottom:1px solid #eee; page-break-inside:avoid;">
-          <span style="font-weight:bold; color:${item.ok ? '#3a8a5a' : '#b3402f'};">${item.ok ? 'OK' : 'Needs attention'}</span>
+          <span style="font-weight:bold; color:${itemStatus(item)==='ok' ? '#3a8a5a' : itemStatus(item)==='flag' ? '#b3402f' : '#888'};">${itemStatus(item)==='ok' ? 'OK' : itemStatus(item)==='flag' ? 'Needs attention' : 'Not reviewed'}</span>
           &nbsp;— ${item.name}
           ${item.notes ? `<div style="color:#555; margin-top:2px;">${item.notes}</div>` : ''}
           ${photosRowHTML(item.id)}
