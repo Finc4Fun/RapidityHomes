@@ -689,6 +689,48 @@ async function buildPdfBlob(){
   return pdf.output('blob');
 }
 
+/* ---------- Real multipart form submission (FormSubmit only attaches files this way, not via /ajax/) ---------- */
+function submitWithAttachments(fields, files){
+  return new Promise((resolve)=>{
+    let iframe = document.getElementById('fsFrame');
+    if(!iframe){
+      iframe = document.createElement('iframe');
+      iframe.id = 'fsFrame'; iframe.name = 'fsFrame'; iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+    const form = document.createElement('form');
+    form.action = `https://formsubmit.co/${LANDLORD_EMAIL}`;
+    form.method = 'POST';
+    form.enctype = 'multipart/form-data';
+    form.target = 'fsFrame';
+    form.style.display = 'none';
+
+    Object.entries(fields).forEach(([name, value])=>{
+      const input = document.createElement('input');
+      input.type = 'hidden'; input.name = name; input.value = value;
+      form.appendChild(input);
+    });
+
+    files.forEach(({name, blob, filename})=>{
+      const input = document.createElement('input');
+      input.type = 'file'; input.name = name; input.style.display = 'none';
+      const dt = new DataTransfer();
+      dt.items.add(new File([blob], filename, {type: blob.type}));
+      input.files = dt.files;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+
+    let settled = false;
+    const finish = ()=>{ if(settled) return; settled = true; form.remove(); resolve(); };
+    iframe.addEventListener('load', finish, { once:true });
+    setTimeout(finish, 10000); // fallback in case the load event doesn't fire
+
+    form.submit();
+  });
+}
+
 /* ---------- Send to Property Manager (auto-email, real PDF attached) ---------- */
 document.getElementById('btnSend').addEventListener('click', async ()=>{
   const btn = document.getElementById('btnSend');
@@ -699,19 +741,23 @@ document.getElementById('btnSend').addEventListener('click', async ()=>{
       buildPdfBlob(),
       new Promise((_, reject)=> setTimeout(()=> reject(new Error('PDF build timed out')), 20000))
     ]);
-    const fd = new FormData();
     const addrSlug = (data.address||'inspection').replace(/[^a-z0-9]+/gi,'_').toLowerCase();
-    fd.append('_subject', `Inspection – ${data.address || 'Unknown address'} (${data.mode})`);
-    fd.append('Address', data.address);
-    fd.append('Tenant', data.tenant);
-    fd.append('Mode', data.mode);
-    fd.append('Date', data.date);
-    fd.append('attachment', pdfBlob, `${addrSlug}_inspection.pdf`);
     const jsonBlob = new Blob([JSON.stringify(data)], {type:'application/json'});
-    fd.append('attachment', jsonBlob, `${addrSlug}_data.json`);
     btn.textContent = 'Sending…';
-    const res = await fetch(`https://formsubmit.co/ajax/${LANDLORD_EMAIL}`, { method:'POST', body:fd });
-    if(!res.ok) throw new Error('send failed');
+    await submitWithAttachments(
+      {
+        _subject: `Inspection – ${data.address || 'Unknown address'} (${data.mode})`,
+        _captcha: 'false',
+        Address: data.address,
+        Tenant: data.tenant,
+        Mode: data.mode,
+        Date: data.date
+      },
+      [
+        { name:'attachment', blob: pdfBlob, filename: `${addrSlug}_inspection.pdf` },
+        { name:'attachment2', blob: jsonBlob, filename: `${addrSlug}_data.json` }
+      ]
+    );
     btn.textContent = 'Sent ✓';
     try{ localStorage.removeItem(DRAFT_KEY); }catch(e){}
     setTimeout(()=>{
