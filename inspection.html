@@ -65,6 +65,17 @@
 
   .section{margin:36px 0 4px;}
   .section .eyebrow{display:block; margin-bottom:10px;}
+  .tenants-block{margin:22px 0 4px;}
+  .tenant-row{display:flex; align-items:center; gap:8px; margin-bottom:4px;}
+  .tenant-row input{flex:1;}
+
+  .kv-group-label{font-family:'Open Sans',sans-serif; font-size:13px; font-weight:600; color:var(--text); margin:18px 0 4px;}
+  .kv-group-label:first-child{margin-top:0;}
+  .kv-row{display:flex; align-items:center; gap:12px; padding:8px 0; border-top:1px solid var(--hairline);}
+  .kv-row:first-of-type{border-top:none;}
+  .kv-row .kv-name{flex:1;}
+  .kv-row .kv-count{width:56px; text-align:center; flex-shrink:0;}
+  .kv-count-label{font-size:11px; color:var(--text-muted); font-family:'Open Sans',sans-serif; flex-shrink:0;}
 
   /* ---- rooms: clear hierarchy between room and item ---- */
   .room{margin-top:22px;}
@@ -210,8 +221,18 @@
   </div>
 
   <div class="field-grid">
-    <div><label class="small">Address</label><input type="text" id="fAddress" placeholder="123 Main St"></div>
-    <div><label class="small">Tenant</label><input type="text" id="fTenant" placeholder="Tenant name"></div>
+    <div style="grid-column:1/-1;"><label class="small">Address</label><input type="text" id="fAddress" placeholder="123 Main St"></div>
+  </div>
+
+  <div class="tenants-block">
+    <label class="small">Tenant(s)</label>
+    <div id="tenantsContainer"></div>
+    <button class="add-link" id="btnAddTenant">+ Add Tenant</button>
+  </div>
+
+  <div class="field-grid">
+    <div><label class="small">Email</label><input type="email" id="fEmail" placeholder="tenant@email.com"></div>
+    <div><label class="small">Phone</label><input type="tel" id="fPhone" placeholder="(555) 555-5555"></div>
     <div><label class="small" id="dateLabel">Date of Occupancy</label><input type="date" id="fDate"></div>
     <div><label class="small">Agent</label><input type="text" id="fLandlord" placeholder="Rapidity Homes"></div>
   </div>
@@ -247,6 +268,17 @@
   </div>
 
   <div class="section">
+    <span class="eyebrow">Keys &amp; Items Received</span>
+    <div class="kv-group-label">Keys Received</div>
+    <div id="keysContainer"></div>
+    <button class="add-link" data-action="addkey">+ Add key</button>
+
+    <div class="kv-group-label">Other Items Received</div>
+    <div id="otherItemsContainer"></div>
+    <button class="add-link" data-action="addotheritem">+ Add item</button>
+  </div>
+
+  <div class="section">
     <span class="eyebrow">Tenant Signature</span>
     <div class="sig-block">
       <div class="sig-top"><span>Sign below to confirm the report above</span><button data-clear="sigTenant">Clear</button></div>
@@ -261,7 +293,6 @@
   <button class="send-cta" id="btnSend">Send to Property Manager</button>
   <div class="send-hint">Emails this report directly — nothing to download or attach.</div>
 
-  <button class="landlord-toggle" id="toggleLandlord">+ Property Manager sign-off (office use — hidden from tenant view)</button>
   <div class="section" id="landlordSection" style="display:none;">
     <span class="eyebrow">Property Manager Signature</span>
     <div class="sig-block">
@@ -293,6 +324,8 @@
   <button id="btnImportTrigger" class="footer-link">Restore from a backup</button> ·
   <button id="btnClearDraft" class="footer-link">Clear saved draft &amp; start fresh</button> ·
   <button id="btnDebugPdf" class="footer-link">Download generated PDF (debug)</button>
+  <br><br>
+  <button id="toggleLandlord" class="footer-link" style="font-weight:600;">Property Manager: open sign-off — in-person walkthrough only</button>
 </footer>
 
 <script>
@@ -308,8 +341,8 @@ const DEFAULT_ROOMS = [
   { name:"Bathroom 1", items:["Walls & Ceiling","Floor","Tub / Shower","Toilet","Sink / Vanity","Light Fixtures & Fan"] },
 ];
 
-let state = { mode:"Move-In", rooms:[], photos:{} };
-let roomIdSeq = 0, itemIdSeq = 0;
+let state = { mode:"Move-In", rooms:[], photos:{}, tenants:[], keys:[], otherItems:[] };
+let roomIdSeq = 0, itemIdSeq = 0, tenantIdSeq = 0, kvIdSeq = 0;
 const DRAFT_KEY = 'rapidity_inspection_draft';
 
 function freshRoom(tpl){ roomIdSeq++; return { id:"room"+roomIdSeq, name: tpl.name, items: tpl.items.map(l=>freshItem(l)) }; }
@@ -318,6 +351,8 @@ function itemStatus(item){
   if(item.status) return item.status;
   return item.ok === false ? 'flag' : 'ok'; // backwards-compat with older saved data
 }
+function freshTenant(name){ tenantIdSeq++; return { id:"tenant"+tenantIdSeq, name: name || "" }; }
+function freshKV(name){ kvIdSeq++; return { id:"kv"+kvIdSeq, name: name || "", count:"" }; }
 
 function init(){
   setupSignaturePad(document.getElementById('sigTenant'));
@@ -325,7 +360,12 @@ function init(){
   const restored = tryLoadDraft();
   if(!restored){
     state.rooms = DEFAULT_ROOMS.map(freshRoom);
+    state.tenants = [freshTenant('')];
+    state.keys = ['Front Door','Mail Box','Laundry Room','Storage Room'].map(freshKV);
+    state.otherItems = ['Pool Pass','Garage Opener'].map(freshKV);
     render();
+    renderTenants();
+    renderKV();
   }
   const tenantDateField = document.getElementById('tenantDate');
   if(!tenantDateField.value){
@@ -373,6 +413,43 @@ function render(){
   document.getElementById('segMoveOut').classList.toggle('active', state.mode === 'Move-Out');
 }
 
+function renderKV(){
+  const keysC = document.getElementById('keysContainer');
+  keysC.innerHTML = '';
+  state.keys.forEach(k=>{
+    keysC.innerHTML += `
+      <div class="kv-row">
+        <input class="kv-name" type="text" value="${escapeAttr(k.name)}" data-kv="${k.id}" data-kvfield="name" data-kvgroup="keys">
+        <span class="kv-count-label"># received</span>
+        <input class="kv-count" type="number" min="0" inputmode="numeric" value="${escapeAttr(k.count)}" data-kv="${k.id}" data-kvfield="count" data-kvgroup="keys">
+      </div>
+    `;
+  });
+  const otherC = document.getElementById('otherItemsContainer');
+  otherC.innerHTML = '';
+  state.otherItems.forEach(k=>{
+    otherC.innerHTML += `
+      <div class="kv-row">
+        <input class="kv-name" type="text" value="${escapeAttr(k.name)}" data-kv="${k.id}" data-kvfield="name" data-kvgroup="otherItems">
+        <span class="kv-count-label"># received</span>
+        <input class="kv-count" type="number" min="0" inputmode="numeric" value="${escapeAttr(k.count)}" data-kv="${k.id}" data-kvfield="count" data-kvgroup="otherItems">
+      </div>
+    `;
+  });
+}
+function renderTenants(){
+  const c = document.getElementById('tenantsContainer');
+  c.innerHTML = '';
+  state.tenants.forEach(t=>{
+    const row = document.createElement('div');
+    row.className = 'tenant-row';
+    row.innerHTML = `
+      <input type="text" placeholder="Tenant name" value="${escapeAttr(t.name)}" data-tenant="${t.id}">
+      ${state.tenants.length > 1 ? `<button class="icon-btn" data-action="removetenant" data-tenant="${t.id}">${X_SVG}</button>` : ''}
+    `;
+    c.appendChild(row);
+  });
+}
 function renderThumbs(container, itemId){
   container.innerHTML = '';
   (state.photos[itemId]||[]).forEach((src, idx)=>{
@@ -387,6 +464,19 @@ function escapeAttr(s){ return (s||'').replace(/"/g,'&quot;'); }
 
 document.addEventListener('input', e=>{
   const t = e.target;
+  if(t.dataset.tenant){
+    const tenant = state.tenants.find(x=>x.id===t.dataset.tenant);
+    if(tenant) tenant.name = t.value;
+    scheduleSave();
+    return;
+  }
+  if(t.dataset.kv){
+    const list = state[t.dataset.kvgroup];
+    const row = list && list.find(x=>x.id===t.dataset.kv);
+    if(row) row[t.dataset.kvfield] = t.value;
+    scheduleSave();
+    return;
+  }
   const roomId = t.dataset.room, itemId = t.dataset.item, field = t.dataset.field;
   if(roomId && field){
     const room = state.rooms.find(r=>r.id===roomId);
@@ -411,7 +501,23 @@ document.addEventListener('click', e=>{
   if(!btn) return;
   const action = btn.dataset.action;
 
-  if(btn.id === 'btnAddRoom' || btn.id === 'btnAddRoomTop'){
+  if(btn.id === 'btnAddTenant'){
+    state.tenants.push(freshTenant(''));
+    renderTenants(); scheduleSave();
+  }
+  else if(action === 'removetenant'){
+    state.tenants = state.tenants.filter(x=>x.id!==btn.dataset.tenant);
+    renderTenants(); scheduleSave();
+  }
+  else if(action === 'addkey'){
+    state.keys.push(freshKV(''));
+    renderKV(); scheduleSave();
+  }
+  else if(action === 'addotheritem'){
+    state.otherItems.push(freshKV(''));
+    renderKV(); scheduleSave();
+  }
+  else if(btn.id === 'btnAddRoom' || btn.id === 'btnAddRoomTop'){
     state.rooms.push(freshRoom({name:"New Room", items:["Walls & Ceiling","Floor","Windows & Screens","Doors","Light Fixtures & Outlets"]}));
     render(); scheduleSave();
     const rooms = document.querySelectorAll('.room');
@@ -423,11 +529,12 @@ document.addEventListener('click', e=>{
     const sec = document.getElementById('landlordSection');
     const show = sec.style.display === 'none';
     sec.style.display = show ? 'block' : 'none';
-    btn.textContent = show ? '– Hide sign-off' : '+ Property Manager sign-off (office use — hidden from tenant view)';
+    btn.textContent = show ? '– Hide Property Manager sign-off' : 'Property Manager: open sign-off — in-person walkthrough only';
     if(show){
       requestAnimationFrame(()=>{
         const c = document.getElementById('sigLandlord');
         if(c && c._resize) c._resize();
+        sec.scrollIntoView({ behavior:'smooth', block:'start' });
       });
     }
   }
@@ -491,12 +598,24 @@ fileInput.addEventListener('change', ()=>{
 
 function setupSignaturePad(canvas){
   function resize(){
-    const ratio = window.devicePixelRatio || 1;
     const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width*ratio; canvas.height = rect.height*ratio;
+    if(rect.width === 0 || rect.height === 0) return; // hidden (e.g. PM section not yet opened) — skip
+    const ratio = window.devicePixelRatio || 1;
+    const newWidth = Math.round(rect.width*ratio), newHeight = Math.round(rect.height*ratio);
+    if(canvas.width === newWidth && canvas.height === newHeight) return; // no real change — mobile browsers
+    // fire spurious resize events on scroll (address bar collapsing), and resizing a canvas
+    // always wipes it, so skipping no-ops is what stops the signature from vanishing.
+    const hadContent = canvas.width > 0 && canvas.height > 0;
+    const preserved = hadContent ? canvas.toDataURL() : null;
+    canvas.width = newWidth; canvas.height = newHeight;
     const ctx = canvas.getContext('2d');
     ctx.scale(ratio, ratio);
     ctx.lineWidth = 1.8; ctx.lineCap='round'; ctx.strokeStyle = '#e8eaea';
+    if(preserved){
+      const img = new Image();
+      img.onload = ()=> ctx.drawImage(img, 0, 0, rect.width, rect.height);
+      img.src = preserved;
+    }
   }
   resize();
   canvas._resize = resize;
@@ -529,7 +648,9 @@ function clearSig(canvas){ canvas.getContext('2d').clearRect(0,0,canvas.width,ca
 function buildPayload(){
   return {
     address: document.getElementById('fAddress').value,
-    tenant: document.getElementById('fTenant').value,
+    tenant: state.tenants.map(t=>t.name).filter(Boolean).join(', '),
+    email: document.getElementById('fEmail').value,
+    phone: document.getElementById('fPhone').value,
     landlord: document.getElementById('fLandlord').value,
     date: document.getElementById('fDate').value,
     mode: state.mode,
@@ -548,7 +669,8 @@ function buildPayload(){
 }
 function restoreFromPayload(data){
   document.getElementById('fAddress').value = data.address||'';
-  document.getElementById('fTenant').value = data.tenant||'';
+  document.getElementById('fEmail').value = data.email||'';
+  document.getElementById('fPhone').value = data.phone||'';
   document.getElementById('fLandlord').value = data.landlord||'';
   document.getElementById('fDate').value = data.date||'';
   document.querySelector(`input[name=mold][value="${data.mold||'no'}"]`).checked = true;
@@ -562,8 +684,16 @@ function restoreFromPayload(data){
   document.getElementById('landlordName').value = data.landlordName||'';
   document.getElementById('landlordDate').value = data.landlordDate||'';
   state = data.state || state;
-  roomIdSeq = 9999; itemIdSeq = 9999;
+  if(!state.tenants || !state.tenants.length){
+    // backwards-compat with older saved data that only had a single `tenant` string
+    state.tenants = data.tenant ? [freshTenant(data.tenant)] : [freshTenant('')];
+  }
+  if(!state.keys) state.keys = ['Front Door','Mail Box','Laundry Room','Storage Room'].map(freshKV);
+  if(!state.otherItems) state.otherItems = ['Pool Pass','Garage Opener'].map(freshKV);
+  roomIdSeq = 9999; itemIdSeq = 9999; tenantIdSeq = 9999; kvIdSeq = 9999;
   render();
+  renderTenants();
+  renderKV();
   loadSigImage(document.getElementById('sigTenant'), data.sigTenant);
   loadSigImage(document.getElementById('sigLandlord'), data.sigLandlord);
 }
@@ -670,10 +800,17 @@ function renderPrintHTML(data, logoDataUrl){
     </div>
     <table style="width:100%; font-size:12px; margin-bottom:22px; border-collapse:collapse;">
       <tr><td style="padding:3px 0;"><b>Address:</b> ${data.address || '—'}</td><td style="padding:3px 0;"><b>Tenant:</b> ${data.tenant || '—'}</td></tr>
+      <tr><td style="padding:3px 0;"><b>Email:</b> ${data.email || '—'}</td><td style="padding:3px 0;"><b>Phone:</b> ${data.phone || '—'}</td></tr>
       <tr><td style="padding:3px 0;"><b>${data.mode === 'Move-In' ? 'Date of Occupancy' : 'Date of Vacating'}:</b> ${data.date || '—'}</td><td style="padding:3px 0;"><b>Agent:</b> ${data.landlord || '—'}</td></tr>
       <tr><td style="padding:3px 0;" colspan="2"><b>Report Type:</b> ${data.mode}</td></tr>
     </table>
     ${roomsHTML}
+    <div style="font-size:12px; margin:18px 0; page-break-inside:avoid;">
+      <div style="font-weight:bold; margin-bottom:6px;">Keys Received</div>
+      ${data.state.keys.filter(k=>k.name).map(k=>`<div>${k.name}: ${k.count || '0'}</div>`).join('') || '<div>—</div>'}
+      <div style="font-weight:bold; margin:10px 0 6px;">Other Items Received</div>
+      ${data.state.otherItems.filter(k=>k.name).map(k=>`<div>${k.name}: ${k.count || '0'}</div>`).join('') || '<div>—</div>'}
+    </div>
     <div style="font-size:12px; margin:18px 0; page-break-inside:avoid;">
       <div><b>Visible mold:</b> ${data.mold === 'yes' ? 'Yes — ' + (data.moldLoc || '') : 'No'}</div>
       <div><b>Disturbed paint:</b> ${data.paint === 'yes' ? 'Yes — ' + (data.paintLoc || '') : 'No'}</div>
@@ -862,6 +999,8 @@ document.getElementById('btnSend').addEventListener('click', async ()=>{
         _captcha: 'false',
         Address: data.address,
         Tenant: data.tenant,
+        Email: data.email,
+        Phone: data.phone,
         Mode: data.mode,
         Date: data.date
       },
