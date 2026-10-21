@@ -114,7 +114,7 @@ a { color: var(--white); text-decoration: none; }
 .hero {
   background:
     linear-gradient(rgba(30, 38, 40, 0.55), rgba(30, 38, 40, 0.55)),
-    url('../Images/kitchen-2_orig.jpg') center / cover fixed;
+    url('../Images/kitchen-2-1067.webp') center / cover fixed;
   min-height: 511px;
   display: flex;
   align-items: center;
@@ -174,7 +174,7 @@ a { color: var(--white); text-decoration: none; }
   opacity: 0.6;
 }
 .styled-hr-short { width: 50px; }
-.section-cta { text-align: center; margin-top: 2rem; }
+.section-cta { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem; }
 
 /* ========== TWO-COLUMN ========== */
 .two-col {
