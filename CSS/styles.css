@@ -33,8 +33,7 @@ h1, h2, h3 {
 }
 a { color: var(--white); text-decoration: none; }
 
-/* Small all-caps label used throughout the pricing section */
-.vignette-label,
+/* Small all-caps label used throughout the results section */
 .savings-table th,
 .savings-month,
 .honest-callout-label,
@@ -71,9 +70,10 @@ a { color: var(--white); text-decoration: none; }
 .nav-menu {
   list-style: none;
   display: flex;
-  gap: 2rem;
+  gap: clamp(1.25rem, 2.5vw, 2rem);
 }
 .nav-menu a {
+  white-space: nowrap;
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   text-transform: uppercase;
@@ -223,13 +223,7 @@ a { color: var(--white); text-decoration: none; }
 .section-light .feature-item h3 { color: var(--teal); }
 .feature-strong { color: var(--white); }
 
-/* ========== PRICING VIGNETTE ========== */
-.pricing-divider { margin: 3rem auto; }
-.vignette-label {
-  letter-spacing: 2px;
-  text-align: center;
-  margin-bottom: 0.5rem;
-}
+/* ========== RESULTS VIGNETTE ========== */
 .vignette-title {
   font-size: clamp(1.6rem, 3vw, 2.2rem);
   text-align: center;
@@ -442,6 +436,11 @@ td.num {
   margin-top: 3px;
   letter-spacing: 0.5px;
 }
+.section-light .review-card {
+  border-color: rgba(50, 61, 63, 0.15);
+  background: var(--white);
+}
+.section-light .review-descriptor { color: #5f6b6d; }
 
 .flag-icon {
   display: inline;
@@ -537,9 +536,7 @@ footer {
     padding: 4rem 1.5rem;
   }
   .section { padding: 3.5rem 0; }
-}
 
-@media (max-width: 768px) {
   .nav-toggle { display: block; }
   .nav-menu {
     display: none;
@@ -555,7 +552,9 @@ footer {
   }
   .nav-open .nav-menu { display: flex; }
   .nav-menu a { display: block; padding: 0.75rem 0; }
+}
 
+@media (max-width: 768px) {
   .two-col,
   .two-col-reverse {
     grid-template-columns: 1fr;
