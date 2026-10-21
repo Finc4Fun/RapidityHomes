@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src 'self'; form-action https://formspree.io; base-uri 'self'; object-src 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Rapidity Homes — All-Inclusive Property Management</title>
 <meta name="description" content="Rapidity Homes offers bespoke all-inclusive Property Management, Construction & Consulting in Northern Virginia that includes repair services simplifying the customer journey to remote home ownership" />
 <meta name="keywords" content="Property Manager, Property Management, Alexandria Property Managers, Virginia Property Managers, Alexandria VA Property Management, Custom Property Management, Bespoke Property Management" />
@@ -374,16 +376,6 @@
   </div>
 </footer>
 
-<script>
-  // Mobile menu: toggle open/closed, and close after picking a link
-  const header = document.querySelector('.header');
-  const navToggle = header.querySelector('.nav-toggle');
-  function setNavOpen(open){
-    header.classList.toggle('nav-open', open);
-    navToggle.setAttribute('aria-expanded', open);
-  }
-  navToggle.addEventListener('click', () => setNavOpen(!header.classList.contains('nav-open')));
-  header.querySelector('.nav-menu').addEventListener('click', e => { if(e.target.closest('a')) setNavOpen(false); });
-</script>
+<script src="JS/main.js"></script>
 </body>
 </html>
